@@ -1,0 +1,25 @@
+{
+  "name": "reactionary-framework",
+  "version": "0.0.0",
+  "description": "Opinionated application framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "keywords": [
+    "framework",
+    "application",
+    "reactionary"
+  ],
+  "author": "Ben Christel",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-jasmine": "2.4.0",
+    "jasmine": "^2.4.1"
+  },
+  "dependencies": {
+    "jasmine": "^2.4.1"
+  }
+}
