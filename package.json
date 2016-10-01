@@ -1,7 +1,7 @@
 {
-  "name": "reactionary-framework",
+  "name": "ascetic",
   "version": "0.0.0",
-  "description": "Opinionated application framework",
+  "description": "Cynical web UI framework",
   "main": "index.js",
   "scripts": {
     "test": "gulp test"
@@ -9,7 +9,10 @@
   "keywords": [
     "framework",
     "application",
-    "reactionary"
+    "app",
+    "web",
+    "browser",
+    "bados"
   ],
   "author": "Ben Christel",
   "license": "MIT",
