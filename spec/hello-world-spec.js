@@ -1,8 +1,9 @@
 describe("All the world's a Stage", function () {
 
-  var context
+  var context, should
   beforeEach(function () {
     context = ReactionaryContext()
+    should = context.should
     context.Stage('hello world stage', function(world) {
       world.getDataToRender = function() {
         return 'Hello, world!'
@@ -13,7 +14,7 @@ describe("All the world's a Stage", function () {
   it('renders "Hello, world!"', function() {
     // this test should pass
     context.test('hello world stage')
-      .expect('Hello, world!')
+      .dataToRender(should.equal, 'Hello, world!')
 
     expect(context.test.results).toEqual({
       total: 1,
@@ -23,7 +24,7 @@ describe("All the world's a Stage", function () {
 
     // this test should fail
     context.test('hello world stage')
-      .expect('Fleen, the barbarian chef')
+      .dataToRender(should.equal, 'Fleen, the barbarian chef')
 
     expect(context.test.results).toEqual({
       total: 2,

@@ -1,7 +1,8 @@
 describe('An echo chamber', function() {
-  var context
+  var context, should
   beforeEach(function () {
     context = ReactionaryContext()
+    should = context.should
 
     context.Stage('echo stage', function(world) {
       var typed = ''
@@ -22,9 +23,10 @@ describe('An echo chamber', function() {
 
   it('renders what the user types', function() {
     context.test('echo stage')
-      .expect({enteredText: ''})
-      .type('hello')
-      .expect({enteredText: 'hello'})
+      .dataToRender('enteredText', should.equal, '')
+      .type('hel')
+      .type('lo')
+      .dataToRender('enteredText', should.equal, 'hello')
 
     expect(context.test.results).toEqual({
       total: 2,
@@ -38,7 +40,7 @@ describe('An echo chamber', function() {
     context.test('echo stage')
       .type('hello')
       .press('Delete')
-      .expect({enteredText: 'hell'})
+      .dataToRender('enteredText', should.equal, 'hell')
 
     expect(context.test.results).toEqual({
       total: 1,
@@ -50,7 +52,7 @@ describe('An echo chamber', function() {
     context.test('echo stage')
       .type('hello')
       .press('Delete')
-      .expect({enteredText: 'this should fail'})
+      .dataToRender('enteredText', should.equal, 'this should fail')
 
     expect(context.test.results).toEqual({
       total: 2,

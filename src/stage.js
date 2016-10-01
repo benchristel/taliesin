@@ -14,14 +14,18 @@ function ReactionaryContext() {
     var testBuilder = {}
     var testWorld
 
-    testBuilder.expect = function(expected) {
-      var actual = getTestWorld().getDataToRender()
-      if (objectMatch(actual, expected) || primitiveMatch(actual, expected)) {
-        context.test.results.passed++
+    testBuilder.dataToRender = function() {
+      if (typeof arguments[0] === 'function') {
+        var matcher  = arguments[0],
+            expected = arguments[1],
+            actual   = getTestWorld().getDataToRender()
       } else {
-        context.test.results.failed++
+        var prop     = arguments[0]
+            matcher  = arguments[1],
+            expected = arguments[2],
+            actual   = getProp(getTestWorld().getDataToRender(), prop)
       }
-      context.test.results.total++
+      assert(matcher, actual, expected)
       return testBuilder
     }
 
@@ -40,6 +44,15 @@ function ReactionaryContext() {
 
     // private testBuilder methods below
 
+    function assert(matcher, actual, expected) {
+      if (matcher(actual, expected)) {
+        context.test.results.passed++
+      } else {
+        context.test.results.failed++
+      }
+      context.test.results.total++
+    }
+
     function getTestWorld() {
       if (!testWorld) {
         testWorld = World()
@@ -47,18 +60,6 @@ function ReactionaryContext() {
       }
 
       return testWorld
-    }
-
-    function objectMatch(actual, expected) {
-      return typeof actual === 'object'
-             && typeof expected === 'object'
-             && containsAll(actual, expected)
-    }
-
-    function primitiveMatch(actual, expected) {
-      return typeof actual !== 'object'
-             && typeof expected !== 'object'
-             && actual === expected
     }
 
     return testBuilder
@@ -70,7 +71,30 @@ function ReactionaryContext() {
     failed: 0
   }
 
+  context.should = {
+    equal: function (actual, expected) {
+      return objectMatch(actual, expected)
+          || primitiveMatch(actual, expected)
+    }
+  }
+
   // context-private classes and functions below
+
+  function objectMatch(actual, expected) {
+    return typeof actual === 'object'
+           && typeof expected === 'object'
+           && containsAll(actual, expected)
+  }
+
+  function primitiveMatch(actual, expected) {
+    return typeof actual !== 'object'
+           && typeof expected !== 'object'
+           && actual === expected
+  }
+
+  function getProp(obj, prop) {
+    return obj[prop]
+  }
 
   function World() {
     var world = {}
