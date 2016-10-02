@@ -31,7 +31,8 @@ describe('An echo chamber', function() {
     expect(context.test.results).toEqual({
       total: 2,
       passed: 2,
-      failed: 0
+      failed: 0,
+      failures: []
     })
   })
 
@@ -45,7 +46,8 @@ describe('An echo chamber', function() {
     expect(context.test.results).toEqual({
       total: 1,
       passed: 1,
-      failed: 0
+      failed: 0,
+      failures: []
     })
 
     // this should fail
@@ -57,7 +59,8 @@ describe('An echo chamber', function() {
     expect(context.test.results).toEqual({
       total: 2,
       passed: 1,
-      failed: 1
+      failed: 1,
+      failures: ['echo stage: enteredText should equal "this should fail", but was "hell".']
     })
   })
 })

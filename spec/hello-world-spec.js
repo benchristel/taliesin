@@ -19,7 +19,8 @@ describe("All the world's a Stage", function () {
     expect(context.test.results).toEqual({
       total: 1,
       passed: 1,
-      failed: 0
+      failed: 0,
+      failures: []
     })
 
     // this test should fail
@@ -29,7 +30,8 @@ describe("All the world's a Stage", function () {
     expect(context.test.results).toEqual({
       total: 2,
       passed: 1,
-      failed: 1
+      failed: 1,
+      failures: ['hello world stage: data should equal "Fleen, the barbarian chef", but was "Hello, world!".']
     })
   })
 })

@@ -25,7 +25,11 @@ function ReactionaryContext() {
             expected = arguments[2],
             actual   = getProp(getTestWorld().getDataToRender(), prop)
       }
-      assert(matcher, actual, expected)
+      if (!assert(matcher, actual, expected)) {
+        context.test.results.failures.push(
+          failureMessage(stageName, prop, matcher, actual, expected)
+        )
+      }
       return testBuilder
     }
 
@@ -45,12 +49,23 @@ function ReactionaryContext() {
     // private testBuilder methods below
 
     function assert(matcher, actual, expected) {
+      context.test.results.total++
       if (matcher(actual, expected)) {
         context.test.results.passed++
+        return true
       } else {
         context.test.results.failed++
+        return false
       }
-      context.test.results.total++
+    }
+
+    function failureMessage (stageName, prop, matcher, actual, expected) {
+      var pathToFailure = prop ? prop : 'data'
+
+      return '' + stageName + ': '
+        + pathToFailure + ' should ' + matcher.name + ' '
+        + JSON.stringify(expected)
+        + ', but was ' + JSON.stringify(actual) + '.'
     }
 
     function getTestWorld() {
@@ -68,11 +83,12 @@ function ReactionaryContext() {
   context.test.results = {
     total: 0,
     passed: 0,
-    failed: 0
+    failed: 0,
+    failures: []
   }
 
   context.should = {
-    equal: function (actual, expected) {
+    equal: function equal(actual, expected) {
       return objectMatch(actual, expected)
           || primitiveMatch(actual, expected)
     }

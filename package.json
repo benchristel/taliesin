@@ -19,10 +19,8 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
-    "gulp-jasmine": "2.4.0",
-    "jasmine": "^2.4.1"
+    "gulp-jasmine": "git://github.com/sindresorhus/gulp-jasmine.git#fix-default-reporter-bug",
+    "jasmine": "^2.5.2"
   },
-  "dependencies": {
-    "jasmine": "^2.4.1"
-  }
+  "dependencies": {}
 }
