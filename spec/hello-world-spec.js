@@ -2,7 +2,7 @@ describe("All the world's a Stage", function () {
 
   var context, should
   beforeEach(function () {
-    context = ReactionaryContext()
+    context = AsceticContext()
     should = context.should
     context.Stage('hello world stage', function(world) {
       world.getDataToRender = function() {

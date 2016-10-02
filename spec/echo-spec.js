@@ -1,7 +1,7 @@
 describe('An echo chamber', function() {
   var context, should
   beforeEach(function () {
-    context = ReactionaryContext()
+    context = AsceticContext()
     should = context.should
 
     context.Stage('echo stage', function(world) {

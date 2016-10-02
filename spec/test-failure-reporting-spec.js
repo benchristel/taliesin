@@ -1,7 +1,7 @@
 describe('A failing Ascetic test', function() {
   var context
   beforeEach(function() {
-    context = ReactionaryContext()
+    context = AsceticContext()
   })
 
   it('reports the failure message', function() {

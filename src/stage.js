@@ -2,7 +2,7 @@
  * Creates a new context in which stages, tests, renderers,
  * etc. can be created independently of other stages.
  */
-function ReactionaryContext() {
+function AsceticContext() {
   var context = {}
   var stages = {}
 
