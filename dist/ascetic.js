@@ -5,6 +5,7 @@
 function AsceticContext() {
   var context = {}
   var stages = {}
+  var world = {}
 
   context.Stage = function(name, definitionFn) {
     stages[name] = definitionFn
@@ -94,6 +95,14 @@ function AsceticContext() {
     }
   }
 
+  context.start = function(stageName) {
+    stages[stageName](world)
+  }
+
+  context.render = function() {
+    return [JSON.stringify(world.getDataToRender())]
+  }
+
   // context-private classes and functions below
 
   function objectMatch(actual, expected) {
@@ -153,3 +162,39 @@ function AsceticContext() {
 
   return context
 }
+
+;(function() {
+  "use strict"
+
+  window.asc = AsceticContext()
+
+  window.addEventListener('load', function() {
+    renderToDom(asc.render())
+  })
+
+  function renderToDom(lines) {
+    var lineElements = getLineElements()
+
+    for (var i = 0; i < lineElements.length; i++) {
+      if (lines[i]) {
+        lineElements[i].innerText = lines[i]
+      } else {
+        lineElements[i].innerText = ''
+      }
+    }
+  }
+
+  var lineElements
+  function getLineElements() {
+    if (!lineElements) {
+      lineElements = []
+      for (var i = 0; i < 30; i++) {
+        var p = document.createElement('p')
+        lineElements.push(p)
+        document.body.appendChild(p)
+      }
+    }
+
+    return lineElements
+  }
+})();

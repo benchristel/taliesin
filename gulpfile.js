@@ -8,7 +8,11 @@ gulp.task('default', ['concat-sources'], function() {
 })
 
 gulp.task('concat-sources', function() {
-  return gulp.src(['src/**/*.js', 'spec/**/*.js'])
+  gulp.src(['src/lib/**/*.js', 'src/web.js'])
+    .pipe(concat('ascetic.js'))
+    .pipe(gulp.dest('dist'))
+
+  return gulp.src(['src/lib/**/*.js', 'spec/**/*.js'])
     .pipe(concat('specs.js'))
     .pipe(gulp.dest('build'))
 })

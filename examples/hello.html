@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ascetic Example: Hello</title>
+    <script type="text/javascript" src="../dist/ascetic.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+asc.Stage('hello', function(world) {
+  world.getDataToRender = function() {
+    return 'hello'
+  }
+})
+
+asc.start('hello')
+
+    </script>
+  </body>
+</html>
