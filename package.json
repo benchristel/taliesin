@@ -12,7 +12,11 @@
     "app",
     "web",
     "browser",
-    "bados"
+    "bados",
+    "minimalist",
+    "cynic",
+    "cynical",
+    "cynicism"
   ],
   "author": "Ben Christel",
   "license": "MIT",
