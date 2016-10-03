@@ -1,7 +1,12 @@
 ;(function() {
   "use strict"
 
-  window.asc = AsceticContext()
+  var context = AsceticContext()
+
+  window.Stage  = context.Stage
+  window.test   = context.test
+  window.should = context.should
+  window.start  = context.start
 
   var lineElements = []
   window.addEventListener('load', function() {
@@ -12,7 +17,7 @@
       document.body.appendChild(p)
     }
 
-    renderToDom(asc.render())
+    renderToDom(context.render())
   })
 
   function renderToDom(lines) {

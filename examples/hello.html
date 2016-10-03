@@ -8,13 +8,16 @@
   <body>
     <script type="text/javascript">
 
-asc.Stage('hello', function(world) {
+Stage('Hello', function(world) {
   world.getDataToRender = function() {
-    return 'hello'
+    return 'hello, world!'
   }
 })
 
-asc.start('hello')
+test('Hello')
+  .dataToRender(should.equal, 'hello, world!')
+
+start('Hello')
 
     </script>
   </body>
