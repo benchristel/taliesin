@@ -49,26 +49,6 @@ function AsceticContext() {
 
     // private testBuilder methods below
 
-    function assert(matcher, actual, expected) {
-      context.test.results.total++
-      if (matcher(actual, expected)) {
-        context.test.results.passed++
-        return true
-      } else {
-        context.test.results.failed++
-        return false
-      }
-    }
-
-    function failureMessage (stageName, prop, matcher, actual, expected) {
-      var pathToFailure = prop ? prop : 'data'
-
-      return '' + stageName + ': '
-        + pathToFailure + ' should ' + matcher.name + ' '
-        + JSON.stringify(expected)
-        + ', but was ' + JSON.stringify(actual) + '.'
-    }
-
     function getTestWorld() {
       if (!testWorld) {
         testWorld = World()
@@ -143,6 +123,26 @@ function AsceticContext() {
     keyEvents.typed = noop
 
     return keyEvents
+  }
+
+  function assert(matcher, actual, expected) {
+    context.test.results.total++
+    if (matcher(actual, expected)) {
+      context.test.results.passed++
+      return true
+    } else {
+      context.test.results.failed++
+      return false
+    }
+  }
+
+  function failureMessage (stageName, prop, matcher, actual, expected) {
+    var pathToFailure = prop ? prop : 'data'
+
+    return '' + stageName + ': '
+      + pathToFailure + ' should ' + matcher.name + ' '
+      + JSON.stringify(expected)
+      + ', but was ' + JSON.stringify(actual) + '.'
   }
 
   function containsAll(container, contents) {
