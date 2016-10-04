@@ -15,7 +15,11 @@ var test = $export.test = function(stageName) {
           expected = arguments[2],
           actual   = getTestWorld().getDataToRender()[prop]
     }
-    if (!assert(matcher, actual, expected)) {
+    test.results.total++
+    if (matcher(actual, expected)) {
+      test.results.passed++
+    } else {
+      test.results.failed++
       test.results.failures.push(
         failureMessage(stageName, prop, matcher, actual, expected)
       )
@@ -74,17 +78,6 @@ function primitiveMatch(actual, expected) {
   return typeof actual !== 'object'
          && typeof expected !== 'object'
          && actual === expected
-}
-
-function assert(matcher, actual, expected) {
-  test.results.total++
-  if (matcher(actual, expected)) {
-    test.results.passed++
-    return true
-  } else {
-    test.results.failed++
-    return false
-  }
 }
 
 function failureMessage (stageName, prop, matcher, actual, expected) {
