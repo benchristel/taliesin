@@ -1,6 +1,4 @@
 ;(function() {
-  "use strict"
-
   var context = AsceticContext()
 
   window.Stage  = context.Stage

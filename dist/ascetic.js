@@ -1,3 +1,16 @@
+"use strict"
+// this makes everything use strict mode,
+// since the code is concatenated before it is run.
+// See the gulpfile.
+
+function Ascetic() { // the curly brace is closed in finale.js.
+
+// $export is ultimately returned from the Ascetic function.
+// Each module adds itself to the $export object.
+var $export = {}
+
+$export.AsceticContext = AsceticContext
+
 /*
  * Creates a new context in which stages, tests, renderers,
  * etc. can be created independently of other stages.
@@ -163,9 +176,11 @@ function AsceticContext() {
   return context
 }
 
-;(function() {
-  "use strict"
+// end the function started in prelude.js
+return $export
+}
 
+;(function() {
   var context = AsceticContext()
 
   window.Stage  = context.Stage

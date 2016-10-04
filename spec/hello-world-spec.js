@@ -2,7 +2,8 @@ describe("All the world's a Stage", function () {
 
   var context, should
   beforeEach(function () {
-    context = AsceticContext()
+    var $import = Ascetic()
+    context = $import.AsceticContext()
     should = context.should
     context.Stage('hello world stage', function(world) {
       world.getDataToRender = function() {

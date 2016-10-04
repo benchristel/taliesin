@@ -1,3 +1,5 @@
+$export.AsceticContext = AsceticContext
+
 /*
  * Creates a new context in which stages, tests, renderers,
  * etc. can be created independently of other stages.

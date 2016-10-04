@@ -1,7 +1,8 @@
 describe('An echo chamber', function() {
   var context, should
   beforeEach(function () {
-    context = AsceticContext()
+    var $import = Ascetic()
+    context = $import.AsceticContext()
     should = context.should
 
     context.Stage('echo stage', function(world) {

@@ -1,7 +1,8 @@
 describe('A failing Ascetic test', function() {
   var context
   beforeEach(function() {
-    context = AsceticContext()
+    var $import = Ascetic()
+    context = $import.AsceticContext()
   })
 
   it('reports the failure message', function() {
