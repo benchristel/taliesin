@@ -31,8 +31,16 @@ $export.render = function() {
 ;(function() {
 
 var test = $export.test = function(stageName) {
-  var testBuilder = {}
+  var testBuilder = Object.create(nullTestBuilder)
   var testWorld
+
+  if (typeof $stages[stageName] !== 'function') {
+    // we've encountered a fatal error and will not be
+    // running assertions.
+    test.results.failed++
+    test.results.failures.push('There is no stage named `' + stageName + '`.')
+    return nullTestBuilder
+  }
 
   testBuilder.dataToRender = function() {
     if (typeof arguments[0] === 'function') {
@@ -157,6 +165,15 @@ function KeyEvents() {
 }
 
 function noop() {}
+function returnNulltestBuilder() {
+  return nullTestBuilder
+}
+
+var nullTestBuilder = {
+  dataToRender: returnNulltestBuilder,
+  type: returnNulltestBuilder,
+  press: returnNulltestBuilder
+}
 
 })();
 

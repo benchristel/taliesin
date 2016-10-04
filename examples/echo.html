@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ascetic Example: Echo</title>
+    <script type="text/javascript" src="../dist/ascetic.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+Stage('Echo', function(world) {
+  // var typed = ''
+  //
+  // world.onCharKey.typed = function(char) {
+  //   typed += char
+  // }
+  //
+  // world.getDataToRender = function() {
+  //   return 'Type something > ' + typed
+  // }
+})
+
+test('Echo')
+  .dataToRender(should.equal, 'Type something > ')
+
+start('Echo')
+
+    </script>
+  </body>
+</html>
