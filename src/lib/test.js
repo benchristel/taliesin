@@ -1,7 +1,4 @@
-// todo: why is Stage capitalized and test lowercase?
-$export.Stage = function(name, definitionFn) {
-  $stages[name] = definitionFn
-}
+;(function() {
 
 var test = $export.test = function(stageName) {
   var testBuilder = {}
@@ -16,7 +13,7 @@ var test = $export.test = function(stageName) {
       var prop     = arguments[0]
           matcher  = arguments[1],
           expected = arguments[2],
-          actual   = getProp(getTestWorld().getDataToRender(), prop)
+          actual   = getTestWorld().getDataToRender()[prop]
     }
     if (!assert(matcher, actual, expected)) {
       test.results.failures.push(
@@ -67,14 +64,6 @@ var should = $export.should = {
   }
 }
 
-$export.start = function(stageName) {
-  $stages[stageName]($world)
-}
-
-$export.render = function() {
-  return [JSON.stringify($world.getDataToRender())]
-}
-
 function objectMatch(actual, expected) {
   return typeof actual === 'object'
          && typeof expected === 'object'
@@ -85,34 +74,6 @@ function primitiveMatch(actual, expected) {
   return typeof actual !== 'object'
          && typeof expected !== 'object'
          && actual === expected
-}
-
-function getProp(obj, prop) {
-  return obj[prop]
-}
-
-function World() {
-  var world = {}
-  var keyEventRegistries = {}
-
-  world.onCharKey = KeyEvents()
-  world.onKey = function(keyName) {
-    if (!keyEventRegistries[keyName]) {
-      keyEventRegistries[keyName] = KeyEvents()
-    }
-
-    return keyEventRegistries[keyName]
-  }
-
-  return world
-}
-
-function KeyEvents() {
-  var keyEvents = {}
-
-  keyEvents.typed = noop
-
-  return keyEvents
 }
 
 function assert(matcher, actual, expected) {
@@ -148,4 +109,30 @@ function ownProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
+function World() {
+  var world = {}
+  var keyEventRegistries = {}
+
+  world.onCharKey = KeyEvents()
+  world.onKey = function(keyName) {
+    if (!keyEventRegistries[keyName]) {
+      keyEventRegistries[keyName] = KeyEvents()
+    }
+
+    return keyEventRegistries[keyName]
+  }
+
+  return world
+}
+
+function KeyEvents() {
+  var keyEvents = {}
+
+  keyEvents.typed = noop
+
+  return keyEvents
+}
+
 function noop() {}
+
+})();
