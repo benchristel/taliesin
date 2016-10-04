@@ -1,11 +1,14 @@
 describe("All the world's a Stage", function () {
 
-  var context, should
+  var Stage, should, test
   beforeEach(function () {
     var $import = Ascetic()
-    context = $import.AsceticContext()
-    should = context.should
-    context.Stage('hello world stage', function(world) {
+
+    Stage  = $import.Stage
+    should = $import.should
+    test   = $import.test
+
+    Stage('hello world stage', function(world) {
       world.getDataToRender = function() {
         return 'Hello, world!'
       }
@@ -14,10 +17,10 @@ describe("All the world's a Stage", function () {
 
   it('renders "Hello, world!"', function() {
     // this test should pass
-    context.test('hello world stage')
+    test('hello world stage')
       .dataToRender(should.equal, 'Hello, world!')
 
-    expect(context.test.results).toEqual({
+    expect(test.results).toEqual({
       total: 1,
       passed: 1,
       failed: 0,
@@ -25,10 +28,10 @@ describe("All the world's a Stage", function () {
     })
 
     // this test should fail
-    context.test('hello world stage')
+    test('hello world stage')
       .dataToRender(should.equal, 'Fleen, the barbarian chef')
 
-    expect(context.test.results).toEqual({
+    expect(test.results).toEqual({
       total: 2,
       passed: 1,
       failed: 1,

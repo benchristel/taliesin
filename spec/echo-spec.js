@@ -1,11 +1,12 @@
 describe('An echo chamber', function() {
-  var context, should
+  var Stage, should, test
   beforeEach(function () {
     var $import = Ascetic()
-    context = $import.AsceticContext()
-    should = context.should
+    Stage  = $import.Stage
+    should = $import.should
+    test   = $import.test
 
-    context.Stage('echo stage', function(world) {
+    Stage('echo stage', function(world) {
       var typed = ''
 
       world.getDataToRender = function() {
@@ -23,13 +24,13 @@ describe('An echo chamber', function() {
   })
 
   it('renders what the user types', function() {
-    context.test('echo stage')
+    test('echo stage')
       .dataToRender('enteredText', should.equal, '')
       .type('hel')
       .type('lo')
       .dataToRender('enteredText', should.equal, 'hello')
 
-    expect(context.test.results).toEqual({
+    expect(test.results).toEqual({
       total: 2,
       passed: 2,
       failed: 0,
@@ -39,12 +40,12 @@ describe('An echo chamber', function() {
 
   it('deletes', function() {
     // this should pass
-    context.test('echo stage')
+    test('echo stage')
       .type('hello')
       .press('Delete')
       .dataToRender('enteredText', should.equal, 'hell')
 
-    expect(context.test.results).toEqual({
+    expect(test.results).toEqual({
       total: 1,
       passed: 1,
       failed: 0,
@@ -52,12 +53,12 @@ describe('An echo chamber', function() {
     })
 
     // this should fail
-    context.test('echo stage')
+    test('echo stage')
       .type('hello')
       .press('Delete')
       .dataToRender('enteredText', should.equal, 'this should fail')
 
-    expect(context.test.results).toEqual({
+    expect(test.results).toEqual({
       total: 2,
       passed: 1,
       failed: 1,

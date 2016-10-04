@@ -1,10 +1,10 @@
 ;(function() {
-  var context = AsceticContext()
+  var $import = Ascetic()
 
-  window.Stage  = context.Stage
-  window.test   = context.test
-  window.should = context.should
-  window.start  = context.start
+  window.Stage  = $import.Stage
+  window.test   = $import.test
+  window.should = $import.should
+  window.start  = $import.start
 
   var lineElements = []
   window.addEventListener('load', function() {
@@ -15,7 +15,7 @@
       document.body.appendChild(p)
     }
 
-    renderToDom(context.render())
+    renderToDom($import.render())
   })
 
   function renderToDom(lines) {

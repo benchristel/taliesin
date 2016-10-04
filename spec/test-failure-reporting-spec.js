@@ -1,21 +1,23 @@
 describe('A failing Ascetic test', function() {
-  var context
+  var Stage, should, test
   beforeEach(function() {
     var $import = Ascetic()
-    context = $import.AsceticContext()
+    Stage  = $import.Stage
+    should = $import.should
+    test   = $import.test
   })
 
   it('reports the failure message', function() {
-    context.Stage('hello stage', function(world) {
+    Stage('hello stage', function(world) {
       world.getDataToRender = function() {
         return {greeting: 'blefm'}
       }
     })
 
-    context.test('hello stage')
-      .dataToRender('greeting', context.should.equal, 'hello')
+    test('hello stage')
+      .dataToRender('greeting', should.equal, 'hello')
 
-    expect(context.test.results.failures).toEqual(
+    expect(test.results.failures).toEqual(
       ['hello stage: greeting should equal "hello", but was "blefm".']
     )
   })
