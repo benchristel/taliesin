@@ -181,7 +181,12 @@ return $export
       document.body.appendChild(p)
     }
 
-    renderToDom($import.render())
+    if (test.results.failed) {
+      renderToDom(test.results.failures)
+      document.body.style.color = '#c00'
+    } else {
+      renderToDom($import.render())
+    }
   })
 
   function renderToDom(lines) {

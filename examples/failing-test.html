@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ascetic Example: Failing Test</title>
+    <script type="text/javascript" src="../dist/ascetic.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+Stage('Hello', function(world) {
+  world.getDataToRender = function() {
+    return 'this sure is some broken code!'
+  }
+})
+
+test('Hello')
+  .dataToRender(should.equal, 'hello, world!')
+
+start('Hello')
+
+    </script>
+  </body>
+</html>
