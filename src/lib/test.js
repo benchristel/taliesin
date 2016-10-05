@@ -115,31 +115,6 @@ function ownProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
-function World() {
-  var world = {}
-  var keyEventRegistries = {}
-
-  world.onCharKey = KeyEvents()
-  world.onKey = function(keyName) {
-    if (!keyEventRegistries[keyName]) {
-      keyEventRegistries[keyName] = KeyEvents()
-    }
-
-    return keyEventRegistries[keyName]
-  }
-
-  return world
-}
-
-function KeyEvents() {
-  var keyEvents = {}
-
-  keyEvents.typed = noop
-
-  return keyEvents
-}
-
-function noop() {}
 function returnNullTestBuilder() {
   return nullTestBuilder
 }

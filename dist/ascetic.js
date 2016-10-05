@@ -13,7 +13,7 @@ var $export = {}
 var $stages = {}
 
 // stores the current global state of the application.
-var $world = {}
+var $world = World()
 
 // todo: why is Stage capitalized and test lowercase?
 $export.Stage = function(name, definitionFn) {
@@ -33,6 +33,16 @@ $export.render = function() {
   }
 
 }
+
+function KeyEvents() {
+  var keyEvents = {}
+
+  keyEvents.typed = noop
+
+  return keyEvents
+}
+
+function noop() {}
 
 ;(function() {
 
@@ -151,6 +161,18 @@ function ownProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
+function returnNullTestBuilder() {
+  return nullTestBuilder
+}
+
+var nullTestBuilder = {
+  dataToRender: returnNullTestBuilder,
+  type: returnNullTestBuilder,
+  press: returnNullTestBuilder
+}
+
+})();
+
 function World() {
   var world = {}
   var keyEventRegistries = {}
@@ -166,27 +188,6 @@ function World() {
 
   return world
 }
-
-function KeyEvents() {
-  var keyEvents = {}
-
-  keyEvents.typed = noop
-
-  return keyEvents
-}
-
-function noop() {}
-function returnNullTestBuilder() {
-  return nullTestBuilder
-}
-
-var nullTestBuilder = {
-  dataToRender: returnNullTestBuilder,
-  type: returnNullTestBuilder,
-  press: returnNullTestBuilder
-}
-
-})();
 
 // end the function started in prelude.js
 return $export

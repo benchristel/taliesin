@@ -9,11 +9,11 @@
     <script type="text/javascript">
 
 Stage('Echo', function(world) {
-  // var typed = ''
-  //
-  // world.onCharKey.typed = function(char) {
-  //   typed += char
-  // }
+  var typed = ''
+  
+  world.onCharKey.typed = function(char) {
+    typed += char
+  }
 
   world.getDataToRender = function() {
     return 'Type something > ' + typed
@@ -22,6 +22,10 @@ Stage('Echo', function(world) {
 
 test('Echo')
   .dataToRender(should.equal, 'Type something > ')
+
+test('Echo')
+  .type('hello')
+  .dataToRender(should.equal, 'Type something > hello')
 
 start('Echo')
 

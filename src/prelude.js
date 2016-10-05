@@ -13,4 +13,4 @@ var $export = {}
 var $stages = {}
 
 // stores the current global state of the application.
-var $world = {}
+var $world = World()
