@@ -31,7 +31,6 @@ $export.render = function() {
     console.error(e)
     return [e.toString()]
   }
-
 }
 
 function KeyEvents() {
