@@ -27,7 +27,7 @@ describe('A test for a nonexistent stage', function() {
   })
 })
 
-xdescribe('A test for a stage with no getDataToRender method', function() {
+describe('A test for a stage with no getDataToRender method', function() {
   var should, test, Stage
   beforeEach(function() {
     var $import = Ascetic()

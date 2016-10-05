@@ -32,13 +32,19 @@ $export.render = function() {
 
 var test = $export.test = function(stageName) {
   var testBuilder = Object.create(nullTestBuilder)
-  var testWorld
+  var testWorld = World()
 
   if (typeof $stages[stageName] !== 'function') {
     // we've encountered a fatal error and will not be
     // running assertions.
-    test.results.failed++
-    test.results.failures.push('There is no stage named `' + stageName + '`.')
+    fail('There is no stage named `' + stageName + '`.')
+    return nullTestBuilder
+  }
+
+  $stages[stageName](testWorld)
+
+  if (typeof testWorld.getDataToRender !== 'function') {
+    fail('Stage `' + stageName + '` did not define a getDataToRender function.')
     return nullTestBuilder
   }
 
@@ -46,21 +52,18 @@ var test = $export.test = function(stageName) {
     if (typeof arguments[0] === 'function') {
       var matcher  = arguments[0],
           expected = arguments[1],
-          actual   = getTestWorld().getDataToRender()
+          actual   = testWorld.getDataToRender()
     } else {
       var prop     = arguments[0]
           matcher  = arguments[1],
           expected = arguments[2],
-          actual   = getTestWorld().getDataToRender()[prop]
+          actual   = testWorld.getDataToRender()[prop]
     }
     test.results.total++
     if (matcher(actual, expected)) {
       test.results.passed++
     } else {
-      test.results.failed++
-      test.results.failures.push(
-        failureMessage(stageName, prop, matcher, actual, expected)
-      )
+      fail(failureMessage(stageName, prop, matcher, actual, expected))
     }
     return testBuilder
   }
@@ -68,25 +71,19 @@ var test = $export.test = function(stageName) {
   testBuilder.type = function(text) {
     for (var i = 0; i < text.length; i++) {
       var char = text[i]
-      getTestWorld().onCharKey.typed(char)
+      testWorld.onCharKey.typed(char)
     }
     return testBuilder
   }
 
   testBuilder.press = function(keyName) {
-    getTestWorld().onKey(keyName).typed(keyName)
+    testWorld.onKey(keyName).typed(keyName)
     return testBuilder
   }
 
-  // private testBuilder methods below
-
-  function getTestWorld() {
-    if (!testWorld) {
-      testWorld = World()
-      $stages[stageName](testWorld)
-    }
-
-    return testWorld
+  function fail(message) {
+    test.results.failed++
+    test.results.failures.push(message)
   }
 
   return testBuilder
