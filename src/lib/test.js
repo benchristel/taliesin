@@ -19,15 +19,23 @@ var test = $export.test = function(stageName) {
   }
 
   testBuilder.dataToRender = function() {
+    var actual, matcher, expected, prop
+
     if (typeof arguments[0] === 'function') {
-      var matcher  = arguments[0],
-          expected = arguments[1],
-          actual   = testWorld.getDataToRender()
+      matcher  = arguments[0]
+      expected = arguments[1]
+      try {
+        actual = testWorld.getDataToRender()
+      } catch(e) {
+        console.error(e)
+        fail('Stage `' + stageName + '` threw an error in getDataToRender: ' + e)
+        return nullTestBuilder
+      }
     } else {
-      var prop     = arguments[0]
-          matcher  = arguments[1],
-          expected = arguments[2],
-          actual   = testWorld.getDataToRender()[prop]
+      prop     = arguments[0]
+      matcher  = arguments[1]
+      expected = arguments[2]
+      actual = testWorld.getDataToRender()[prop]
     }
     test.results.total++
     if (matcher(actual, expected)) {
@@ -132,14 +140,14 @@ function KeyEvents() {
 }
 
 function noop() {}
-function returnNulltestBuilder() {
+function returnNullTestBuilder() {
   return nullTestBuilder
 }
 
 var nullTestBuilder = {
-  dataToRender: returnNulltestBuilder,
-  type: returnNulltestBuilder,
-  press: returnNulltestBuilder
+  dataToRender: returnNullTestBuilder,
+  type: returnNullTestBuilder,
+  press: returnNullTestBuilder
 }
 
 })();

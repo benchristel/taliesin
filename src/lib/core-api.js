@@ -8,5 +8,11 @@ $export.start = function(stageName) {
 }
 
 $export.render = function() {
-  return [JSON.stringify($world.getDataToRender())]
+  try {
+    return [JSON.stringify($world.getDataToRender())]
+  } catch(e) {
+    console.error(e)
+    return [e.toString()]
+  }
+
 }

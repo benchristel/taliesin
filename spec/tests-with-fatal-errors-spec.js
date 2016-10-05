@@ -48,3 +48,38 @@ describe('A test for a stage with no getDataToRender method', function() {
     )
   })
 })
+
+describe('A test for a stage whose getDataToRender method throws an error', function() {
+  var should, test, Stage
+  beforeEach(function() {
+    var $import = Ascetic()
+    Stage  = $import.Stage
+    should = $import.should
+    test   = $import.test
+
+    Stage('errors', function(world) {
+      world.getDataToRender = function() {
+        throw 'broken!'
+      }
+    })
+
+    spyOn(console, 'error')
+  })
+
+  it('records a failure', function() {
+    test('errors')
+      .dataToRender(should.equal, 'something')
+
+    expect(test.results.failed).toEqual(1)
+    expect(test.results.failures).toEqual(
+      ['Stage `errors` threw an error in getDataToRender: broken!']
+    )
+  })
+
+  it('logs the exception to the console', function() {
+    test('errors')
+      .dataToRender(should.equal, 'something')
+
+    expect(console.error).toHaveBeenCalledWith('broken!')
+  })
+})

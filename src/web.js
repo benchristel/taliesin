@@ -5,6 +5,7 @@
   window.test   = $import.test
   window.should = $import.should
   window.start  = $import.start
+  var render    = $import.render
 
   var lineElements = []
   window.addEventListener('load', function() {
@@ -19,7 +20,7 @@
       renderToDom(test.results.failures)
       document.body.style.color = '#c00'
     } else {
-      renderToDom($import.render())
+      renderToDom(render())
     }
   })
 

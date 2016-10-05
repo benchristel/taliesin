@@ -14,10 +14,10 @@ Stage('Echo', function(world) {
   // world.onCharKey.typed = function(char) {
   //   typed += char
   // }
-  //
-  // world.getDataToRender = function() {
-  //   return 'Type something > ' + typed
-  // }
+
+  world.getDataToRender = function() {
+    return 'Type something > ' + typed
+  }
 })
 
 test('Echo')
