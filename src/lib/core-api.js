@@ -31,7 +31,7 @@ inject('render', function(deps) {
 
   return function render() {
     try {
-      return [JSON.stringify($world.getDataToRender())]
+      return $world.renderer($world.getDataToRender())
     } catch(e) {
       console.error(e)
       return [e.toString()]

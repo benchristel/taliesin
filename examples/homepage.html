@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ascetic Example: Homepage</title>
+    <script type="text/javascript" src="../dist/ascetic.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+Stage('Home', function(world) {
+  var scroll = 0
+  var lines = flatten([
+    '',
+    '',
+    center(80, 'A S C E T I C'),
+    '',
+    '',
+    center(80, repeat(70, '-')),
+    '',
+    center(80, '*** Press (j) and (k) to scroll ***'),
+    '',
+    paragraph(
+      'Ascetic is a UI framework that brings the web ' +
+      'up-to-date with the technology of the 20th century. ' +
+      'Never-before-seen scrolling capabilities combined ' +
+      'with paranoid levels of test coverage ensure that ' +
+      'your application is an unstoppable juggernaut of ' +
+      'epic-level text. Type both uppercase and lowercase ' +
+      'characters in your quest for World-Wide-Web ' +
+      'domination!'
+    ),
+    '',
+    center(80, repeat(70, '-')),
+    '',
+    wrapCenterJustify(60, 80,
+      '"Show me your flowcharts and conceal your tables, and ' +
+      'I shall continue to be mystified. Show me your ' +
+      'tables, and I won’t usually need your flowcharts; ' +
+      'they’ll be obvious."'
+    ),
+    '',
+    center(80, rightJustify(60, '-- Fred Brooks, _The Mythical Man Month_'))
+  ])
+
+  world.onCharKey.typed = function(char) {
+    if (char === 'j' && scroll < lines.length) {
+      scroll++
+    } else
+    if (char === 'k' && scroll > 0) {
+      scroll--
+    }
+  }
+
+  world.getDataToRender = function() {
+    return {lines: lines, scroll: scroll}
+  }
+
+  world.renderer = scrollablePage
+})
+
+function repeat(times, string) {
+  return Array(times + 1).join(string)
+}
+
+function center(width, string) {
+  var neededMargin = width - string.length
+  if (neededMargin <= 0) {
+    return string
+  }
+
+  var leftMargin  = Math.ceil(neededMargin / 2)
+  var rightMargin = Math.floor(neededMargin / 2)
+
+  return repeat(leftMargin, ' ')
+    + string
+    + repeat(rightMargin, ' ')
+}
+
+function scrollablePage(data) {
+  var lines  = data.lines
+  var scroll = data.scroll
+
+  return lines.slice(scroll, scroll + 30)
+}
+
+function paragraph(text) {
+  return wrapCenterJustify(70, 80, text)
+}
+
+function wrapCenterJustify(wrapWidth, centerWidth, text) {
+  var lines = wordWrap(wrapWidth, text)
+  for (var i = 0; i < lines.length - 1; i++) {
+    lines[i] = center(centerWidth, justify(wrapWidth, lines[i]))
+  }
+  lines[lines.length - 1] = center(centerWidth,
+    snug(wrapWidth, lines[lines.length - 1])
+  )
+  return lines
+}
+
+function wordWrap(width, text) {
+  var lines = []
+  var currLine = ''
+  text.split(/\s+/).forEach(function(word) {
+    if (currLine === '') {
+      currLine = word
+    } else if (currLine.length + word.length + 1 < width) {
+      currLine += ' ' + word
+    } else {
+      lines.push(currLine)
+      currLine = word
+    }
+  })
+  lines.push(currLine)
+  return lines
+}
+
+function justify(width, line) {
+  var words = line.split(/\s+/)
+  var gapsToFill = words.length - 1
+  var spacesRequired = width - words.join('').length
+  var justified = ''
+  var space
+
+  console.log(line, gapsToFill, spacesRequired)
+
+  while (gapsToFill > 0) {
+    justified = words.pop() + justified
+    space = repeat(Math.ceil(spacesRequired / gapsToFill), ' ')
+    justified = space + justified
+    spacesRequired -= space.length
+    gapsToFill--
+  }
+
+  return words.pop() + justified
+}
+
+function rightJustify(width, line) {
+  return repeat(width - line.length, ' ') + line
+}
+
+function flatten(array) {
+  var output = []
+  array.forEach(function(item) {
+    if (item instanceof Array) {
+      output = output.concat(flatten(item))
+    } else {
+      output.push(item)
+    }
+  })
+  return output
+}
+
+var spaces = Array(80).join(' ')
+function snug(width, text) {
+  if (text.length < width) {
+    return snug(width, text + spaces)
+  } else {
+    return text.slice(0, width)
+  }
+}
+
+start('Home')
+
+    </script>
+  </body>
+</html>
