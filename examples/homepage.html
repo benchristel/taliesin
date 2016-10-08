@@ -123,8 +123,6 @@ function justify(width, line) {
   var justified = ''
   var space
 
-  console.log(line, gapsToFill, spacesRequired)
-
   while (gapsToFill > 0) {
     justified = words.pop() + justified
     space = repeat(Math.ceil(spacesRequired / gapsToFill), ' ')

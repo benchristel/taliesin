@@ -43,6 +43,17 @@ inject('sendInputEvent', function(deps) {
   var $world = deps.$world
 
   return function sendInputEvent(key) {
+    $world.onKey(key).typed()
     $world.onCharKey.typed(key)
+  }
+})
+
+inject('goToStage', function(deps) {
+  var $stages = deps.$stages
+  var $world  = deps.$world
+
+  return function goToStage(stageName) {
+    $world.resetIO()
+    $stages[stageName]($world)
   }
 })

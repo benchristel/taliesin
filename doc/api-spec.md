@@ -104,3 +104,27 @@ world.fileIndex = {
 ```
 
 ## Schemas and Validation
+
+During test execution, the test runner validates rendered data and the state of the world against schemas.
+
+Renderer functions may define an associated schema as a property on the function object:
+
+```javascript
+function myRenderer(data) {
+  // ...
+}
+myRenderer.inputSchema = {
+  // ...
+}
+```
+
+The application may define a schema to describe the shape of the `world` object. The schema and with the initial state of the world are passed to the `initWorld` function which must be called before states can be defined.
+
+initWorld({score: 0}, {score: isNumber})
+
+`initWorld` immediately validates the initial state (the first argument) against the schema. If the initial state is not valid, it throws an error.
+
+Each test that runs also validates the state of the world and the output of getDataToRender
+
+- after `setUpWorld` is called
+- after each event (input, timer, request returning, etc.)

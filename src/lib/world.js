@@ -18,6 +18,10 @@ inject('World', function(deps) {
       return keyEventRegistries[keyName]
     }
 
+    world.resetIO = function() {
+      keyEventRegistries = {}
+    }
+
     return world
   }
 })

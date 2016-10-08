@@ -4,7 +4,8 @@ window.Stage  = $context.Stage
 window.test   = $context.test
 window.should = $context.should
 window.start  = $context.start
-var render    = $context.render
+window.goToStage   = $context.goToStage
+var render         = $context.render
 var sendInputEvent = $context.sendInputEvent
 
 var lineElements = []

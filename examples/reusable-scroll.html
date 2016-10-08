@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ascetic Example: Reusable Scroll</title>
+    <script type="text/javascript" src="../dist/ascetic.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+/**
+ * This example demonstrates how one might create an
+ * abstraction for the idea of "a page where the (j) and (k)
+ * keys scroll the text up and down" and apply it to several
+ * different stages.
+ */
+
+// === REUSED CODE =========================================
+
+/**
+ * the Scroller encapsulates the I/O related to scrolling.
+ * it captures keyboard events for the (j) and (k) keys,
+ * keeps track of the scroll state, and provides a function
+ * that renders the scrolled content.
+ *
+ * Because Scroller is stateful, each Stage that uses it
+ * creates its own Scroller instance. The effect of this is
+ * that scroll state does not persist between Stages. If you
+ * navigate to a Stage, scroll, and navigate away, your
+ * scroll position is not saved.
+ */
+function Scroller(world, numLines) {
+  var WINDOW_HEIGHT = 30
+  var MORE_MSG_HEIGHT = 2
+  var CONTENT_HEIGHT = WINDOW_HEIGHT - MORE_MSG_HEIGHT
+  var position = 0;
+
+  world.onKey('j').typed = function() {
+    // scroll down
+    if (isMoreBelow()) position++
+  }
+
+  world.onKey('k').typed = function() {
+    // scroll up
+    if (position > 0) position--
+  }
+
+  function isMoreBelow() {
+    return position < numLines - CONTENT_HEIGHT
+  }
+
+  return function view(lines) {
+    var content =
+      lines.slice(position, position + CONTENT_HEIGHT)
+
+    if (isMoreBelow()) {
+      var remaining = (numLines - CONTENT_HEIGHT - position)
+      content.push('')
+      content.push('*** ' + remaining + ' more lines ***')
+    }
+
+    return content
+  }
+}
+
+/**
+ * The scrollablePage renderer uses the view function
+ * returned by Scroller to render the content.
+ *
+ * In a more complex situation where only part of the
+ * page should scroll, the renderer function would have to
+ * pass a viewport size to `scroller` to tell it how many
+ * lines to render. Then the renderer could insert the lines
+ * rendered by `scroller` into the other page content.
+ */
+function scrollablePage(data) {
+  var lines    = data.lines
+  var scroller = data.scroller
+
+  return scroller(lines)
+}
+
+/**
+ * the bKeyGoesToIndex function, in the same spirit as
+ * Scroller, augments the world with a key event handler.
+ */
+function bKeyGoesToIndex(world) {
+  world.onKey('b').typed = function() {
+    goToStage('Index')
+  }
+}
+
+// === STAGES ==============================================
+
+Stage('Index', function(world) {
+  var lines = getIndexLines()
+  var scroller = Scroller(world, lines.length)
+
+  world.getDataToRender = function() {
+    return {lines: lines, scroller: scroller}
+  }
+
+  world.onKey('1').typed = function() {
+    goToStage('Proem')
+  }
+
+  world.onKey('2').typed = function() {
+    goToStage('Rune I')
+  }
+
+  world.renderer = scrollablePage
+})
+
+Stage('Proem', function(world) {
+  var lines = getProemLines()
+  var scroller = Scroller(world, lines.length)
+
+  bKeyGoesToIndex(world)
+
+  world.getDataToRender = function() {
+    return {lines: lines, scroller: scroller}
+  }
+
+  world.renderer = scrollablePage
+})
+
+Stage('Rune I', function(world) {
+  var lines = getRune1Lines()
+  var scroller = Scroller(world, lines.length)
+
+  bKeyGoesToIndex(world)
+
+  world.getDataToRender = function() {
+    return {lines: lines, scroller: scroller}
+  }
+
+  world.renderer = scrollablePage
+})
+
+start('Index')
+
+// === END OF THE MAIN PROGRAM =============================
+// functions below just return static data
+
+function getIndexLines() {
+  return [
+    'KALEVALA',
+    '',
+    'TABLE OF CONTENTS',
+    '',
+    '1. Proem                       press (1)',
+    '2. Birth of Wainamoinen        press (2)'
+    // "3. Wainamoinen's Sowing        press (3)"
+  ]
+}
+
+function getProemLines() {
+  return [
+    '*** Press (j) and (k) to scroll ***',
+    '',
+    'PROEM',
+    '',
+    'MASTERED by desire impulsive,',
+    'By a mighty inward urging,',
+    'I am ready now for singing,',
+    'Ready to begin the chanting',
+    "Of our nation's ancient folk-song",
+    "Handed down from by-gone ages.",
+    "In my mouth the words are melting,",
+    "From my lips the tones are gliding,",
+    "From my tongue they wish to hasten;",
+    "When my willing teeth are parted,",
+    "When my ready mouth is opened,",
+    "Songs of ancient wit and wisdom",
+    "Hasten from me not unwilling.",
+    "",
+    "Golden friend, and dearest brother,",
+    "Brother dear of mine in childhood,",
+    "Come and sing with me the stories,",
+    "Come and chant with me the legends,",
+    "Legends of the times forgotten,",
+    "Since we now are here together,",
+    "Come together from our roamings.",
+    "Seldom do we come for singing,",
+    "Seldom to the one, the other,",
+    "O'er this cold and cruel country,",
+    "O'er the poor soil of the Northland.",
+    "Let us clasp our hands together",
+    "That we thus may best remember.",
+    "Join we now in merry singing,",
+    "Chant we now the oldest folk-lore,",
+    "That the dear ones all may hear them,",
+    "That the well-inclined may hear them,",
+    "Of this rising generation.",
+    "These are words in childhood taught me,",
+    "Songs preserved from distant ages,",
+    "Legends they that once were taken",
+    "From the belt of Wainamoinen,",
+    "From the forge of Ilmarinen,",
+    "From the sword of Kaukomieli,",
+    "From the bow of Youkahainen,",
+    "From the pastures of the Northland,",
+    "From the meads of Kalevala.",
+    "These my dear old father sang me",
+    "When at work with knife and hatchet",
+    "These my tender mother taught me",
+    "When she twirled the flying spindle,",
+    "When a child upon the matting",
+    "By her feet I rolled and tumbled.",
+    "",
+    "Incantations were not wanting",
+    "Over Sampo and o'er Louhi,",
+    "Sampo growing old in singing,",
+    "Louhi ceasing her enchantment.",
+    "In the songs died wise Wipunen,",
+    "At the games died Lemminkainen.",
+    "There are many other legends,",
+    "Incantations that were taught me,",
+    "That I found along the wayside,",
+    "Gathered in the fragrant copses,",
+    "Blown me from the forest branches,",
+    "Culled among the plumes of pine-trees,",
+    "Scented from the vines and flowers,",
+    "Whispered to me as I followed",
+    "Flocks in land of honeyed meadows,",
+    "Over hillocks green and golden,",
+    "After sable-haired Murikki,",
+    "And the many-colored Kimmo.",
+    "Many runes the cold has told me,",
+    "Many lays the rain has brought me,",
+    "Other songs the winds have sung me;",
+    "Many birds from many forests,",
+    "Oft have sung me lays in concord",
+    "Waves of sea, and ocean billows,",
+    "Music from the many waters,",
+    "Music from the whole creation,",
+    "Oft have been my guide and master.",
+    "Sentences the trees created,",
+    "Rolled together into bundles,",
+    "Moved them to my ancient dwelling,",
+    "On the sledges to my cottage,",
+    "Tied them to my garret rafters,",
+    "Hung them on my dwelling-portals,",
+    "Laid them in a chest of boxes,",
+    "Boxes lined with shining copper.",
+    "Long they lay within my dwelling",
+    "Through the chilling winds of winter,",
+    "In my dwelling-place for ages.",
+    "",
+    "Shall I bring these songs together",
+    "From the cold and frost collect them?",
+    "Shall I bring this nest of boxes,",
+    "Keepers of these golden legends,",
+    "To the table in my cabin,",
+    "Underneath the painted rafters,",
+    "In this house renowned and ancient?",
+    "Shall I now these boxes open,",
+    "Boxes filled with wondrous stories?",
+    "Shall I now the end unfasten",
+    "Of this ball of ancient wisdom,",
+    "These ancestral lays unravel?",
+    "Let me sing an old-time legend,",
+    "That shall echo forth the praises",
+    "Of the beer that I have tasted,",
+    "Of the sparkling beer of barley.",
+    "Bring to me a foaming goblet",
+    "Of the barley of my fathers,",
+    "Lest my singing grow too weary,",
+    "Singing from the water only.",
+    "Bring me too a cup of strong-beer,",
+    "It will add to our enchantment,",
+    "To the pleasure of the evening,",
+    "Northland's long and dreary evening,",
+    "For the beauty of the day-dawn,",
+    "For the pleasure of the morning,",
+    "The beginning of the new-day.",
+    "",
+    "Often I have heard them chanting,",
+    "Often I have heard them singing,",
+    "That the nights come to us singly,",
+    "That the Moon beams on us singly,",
+    "That the Sun shines on us singly;",
+    "Singly also, Wainamoinen,",
+    "The renowned and wise enchanter,",
+    "Born from everlasting Ether",
+    "Of his mother, Ether's daughter.",
+    "",
+    "*** Press (b) to go back ***"
+  ]
+}
+
+function getRune1Lines() {
+  return [
+    '*** Press (j) and (k) to scroll ***',
+    '',
+    'RUNE I',
+    '',
+    "IN primeval times, a maiden,",
+    "Beauteous Daughter of the Ether,",
+    "Passed for ages her existence",
+    "In the great expanse of heaven,",
+    "O'er the prairies yet enfolded.",
+    "Wearisome the maiden growing,",
+    "Her existence sad and hopeless,",
+    "Thus alone to live for ages",
+    "In the infinite expanses",
+    "Of the air above the sea-foam,",
+    "In the far outstretching spaces,",
+    "In a solitude of ether,",
+    "She descended to the ocean,",
+    "Waves her coach, and waves her pillow.",
+    "Thereupon the rising storm-wind",
+    "Flying from the East in fierceness,",
+    "Whips the ocean into surges,",
+    "Strikes the stars with sprays of ocean",
+    "Till the waves are white with fervor.",
+    "To and fro they toss the maiden,",
+    "Storm-encircled, hapless maiden;",
+    "With her sport the rolling billows,",
+    "With her play the storm-wind forces,",
+    "On the blue back of the waters;",
+    "On the white-wreathed waves of ocean,",
+    "Play the forces of the salt-sea,",
+    "With the lone and helpless maiden;",
+    "Till at last in full conception,",
+    "Union now of force and beauty,",
+    "Sink the storm-winds into slumber;",
+    "Overburdened now the maiden",
+    "Cannot rise above the surface;",
+    "Seven hundred years she wandered,",
+    "Ages nine of man's existence,",
+    "Swam the ocean hither, thither,",
+    "Could not rise above the waters,",
+    "Conscious only of her travail;",
+    "Seven hundred years she labored",
+    "Ere her first-born was delivered.",
+    "Thus she swam as water-mother,",
+    "Toward the east, and also southward,",
+    "Toward the west, and also northward;",
+    "Swam the sea in all directions,",
+    "Frightened at the strife of storm-winds,",
+    "Swam in travail, swam unceasing,",
+    "Ere her first-born was delivered.",
+    "",
+    "Then began she gently weeping,",
+    "Spake these measures, heavy-hearted:",
+    "\"Woe is me, my life hard-fated!",
+    "Woe is me, in this my travail!",
+    "Into what have I now fallen?",
+    "Woe is me, that I unhappy,",
+    "Left my home in subtle ether,",
+    "Came to dwell amid the sea-foam,",
+    "To be tossed by rolling billows,",
+    "To be rocked by winds and waters,",
+    "On the far outstretching waters,",
+    "In the salt-sea's vast expanses,",
+    "Knowing only pain and trouble!",
+    "Better far for me, O Ukko!",
+    "Were I maiden in the Ether,",
+    "Than within these ocean-spaces,",
+    "To become a water-mother!",
+    "All this life is cold and dreary,",
+    "Painful here is every motion,",
+    "As I linger in the waters,",
+    "As I wander through the ocean.",
+    "Ukko, thou O God, up yonder,",
+    "Thou the ruler of the heavens,",
+    "Come thou hither, thou art needed,",
+    "Come thou hither, I implore thee,",
+    "To deliver me from trouble,",
+    "To deliver me in travail.",
+    "Come I pray thee, hither hasten,",
+    "Hasten more that thou art needed,",
+    "Haste and help this helpless maiden!\"",
+    "",
+    "When she ceased her supplications,",
+    "Scarce a moment onward passes,",
+    "Ere a beauteous duck descending,",
+    "Hastens toward the water-mother,",
+    "Comes a-flying hither, thither,",
+    "Seeks herself a place for nesting.",
+    "Flies she eastward, flies she westward,",
+    "Circles northward, circles southward,",
+    "Cannot find a grassy hillock,",
+    "Not the smallest bit of verdure;",
+    "Cannot find a spot protected,",
+    "Cannot find a place befitting,",
+    "Where to make her nest in safety.",
+    "Flying slowly, looking round her,",
+    "She descries no place for resting,",
+    "Thinking loud and long debating,",
+    "And her words are such as follow:",
+    "\"Build I in the winds my dwelling,",
+    "On the floods my place of nesting?",
+    "Surely would the winds destroy it,",
+    "Far away the waves would wash it.\"",
+    "",
+    "Then the daughter of the Ether,",
+    "Now the hapless water-mother,",
+    "Raised her shoulders out of water,",
+    "Raised her knees above the ocean,",
+    "That the duck might build her dwelling,",
+    "Build her nesting-place in safety.",
+    "Thereupon the duck in beauty,",
+    "Flying slowly, looking round her,",
+    "Spies the shoulders of the maiden,",
+    "Sees the knees of Ether's daughter,",
+    "Now the hapless water-mother,",
+    "Thinks them to be grassy hillocks,",
+    "On the blue back of the ocean.",
+    "Thence she flies and hovers slowly,",
+    "Lightly on the knee she settles,",
+    "Finds a nesting-place befitting,",
+    "Where to lay her eggs in safety.",
+    "Here she builds her humble dwelling,",
+    "Lays her eggs within, at pleasure,",
+    "Six, the golden eggs she lays there,",
+    "Then a seventh, an egg of iron;",
+    "Sits upon her eggs to hatch them,",
+    "Quickly warms them on the knee-cap",
+    "Of the hapless water-mother;",
+    "Hatches one day, then a second,",
+    "Then a third day sits and hatches.",
+    "Warmer grows the water round her,",
+    "Warmer is her bed in ocean,",
+    "While her knee with fire is kindled,",
+    "And her shoulders too are burning,",
+    "Fire in every vein is coursing.",
+    "Quick the maiden moves her shoulders,",
+    "Shakes her members in succession,",
+    "Shakes the nest from its foundation,",
+    "And the eggs fall into ocean,",
+    "Dash in pieces on the bottom",
+    "Of the deep and boundless waters.",
+    "In the sand they do not perish,",
+    "Not the pieces in the ocean;",
+    "But transformed, in wondrous beauty",
+    "All the fragments come together",
+    "Forming pieces two in number,",
+    "One the upper, one the lower,",
+    "Equal to the one, the other.",
+    "From one half the egg, the lower,",
+    "Grows the nether vault of Terra:",
+    "From the upper half remaining,",
+    "Grows the upper vault of Heaven;",
+    "From the white part come the moonbeams,",
+    "From the yellow part the sunshine,",
+    "From the motley part the starlight,",
+    "From the dark part grows the cloudage;",
+    "And the days speed onward swiftly,",
+    "Quickly do the years fly over,",
+    "From the shining of the new sun",
+    "From the lighting of the full moon.",
+    "",
+    "Still the daughter of the Ether,",
+    "Swims the sea as water-mother,",
+    "With the floods outstretched before her,",
+    "And behind her sky and ocean.",
+    "Finally about the ninth year,",
+    "In the summer of the tenth year,",
+    "Lifts her head above the surface,",
+    "Lifts her forehead from the waters,",
+    "And begins at last her workings,",
+    "Now commences her creations,",
+    "On the azure water-ridges,",
+    "On the mighty waste before her.",
+    "Where her hand she turned in water,",
+    "There arose a fertile hillock;",
+    "Wheresoe'er her foot she rested,",
+    "There she made a hole for fishes;",
+    "Where she dived beneath the waters,",
+    "Fell the many deeps of ocean;",
+    "Where upon her side she turned her,",
+    "There the level banks have risen;",
+    "Where her head was pointed landward,",
+    "There appeared wide bays and inlets;",
+    "When from shore she swam a distance,",
+    "And upon her back she rested,",
+    "There the rocks she made and fashioned,",
+    "And the hidden reefs created,",
+    "Where the ships are wrecked so often,",
+    "Where so many lives have perished.",
+    "",
+    "Thus created were the islands,",
+    "Rocks were fastened in the ocean,",
+    "Pillars of the sky were planted,",
+    "Fields and forests were created,",
+    "Checkered stones of many colors,",
+    "Gleaming in the silver sunlight,",
+    "All the rocks stood well established;",
+    "But the singer, Wainamoinen,",
+    "Had not yet beheld the sunshine,",
+    "Had not seen the golden moonlight,",
+    "Still remaining undelivered.",
+    "Wainamoinen, old and trusty,",
+    "Lingering within his dungeon",
+    "Thirty summers altogether,",
+    "And of winters, also thirty,",
+    "Peaceful on the waste of waters,",
+    "On the broad-sea's yielding bosom,",
+    "Well reflected, long considered,",
+    "How unborn to live and flourish",
+    "In the spaces wrapped in darkness,",
+    "In uncomfortable limits,",
+    "Where he had not seen the moonlight,",
+    "Had not seen the silver sunshine.",
+    "Thereupon these words be uttered,",
+    "Let himself be heard in this wise:",
+    "\"Take, O Moon, I pray thee, take me,",
+    "Take me, thou, O Sun above me,",
+    "Take me, thou O Bear of heaven,",
+    "From this dark and dreary prison,",
+    "From these unbefitting portals,",
+    "From this narrow place of resting,",
+    "From this dark and gloomy dwelling,",
+    "Hence to wander from the ocean,",
+    "Hence to walk upon the islands,",
+    "On the dry land walk and wander,",
+    "Like an ancient hero wander,",
+    "Walk in open air and breathe it,",
+    "Thus to see the moon at evening,",
+    "Thus to see the silver sunlight,",
+    "Thus to see the Bear in heaven,",
+    "That the stars I may consider.\"",
+    "",
+    "Since the Moon refused to free him,",
+    "And the Sun would not deliver,",
+    "Nor the Great Bear give assistance,",
+    "His existence growing weary,",
+    "And his life but an annoyance,",
+    "Bursts he then the outer portals",
+    "Of his dark and dismal fortress;",
+    "With his strong, but unnamed finger,",
+    "Opens he the lock resisting;",
+    "With the toes upon his left foot,",
+    "With the fingers of his right hand,",
+    "Creeps he through the yielding portals",
+    "To the threshold of his dwelling;",
+    "On his knees across the threshold,",
+    "Throws himself head foremost, forward",
+    "Plunges into deeps of ocean,",
+    "Plunges hither, plunges thither,",
+    "Turning with his hands the water;",
+    "Swims he northward, swims he southward,",
+    "Swims he eastward, swims he westward,",
+    "Studying his new surroundings.",
+    "",
+    "Thus our hero reached the water,",
+    "Rested five years in the ocean,",
+    "Six long years, and even seven years,",
+    "Till the autumn of the eighth year,",
+    "When at last he leaves the waters,",
+    "Stops upon a promontory,",
+    "On a coast bereft of verdure;",
+    "On his knees he leaves the ocean,",
+    "On the land he plants his right foot,",
+    "On the solid ground his left foot,",
+    "Quickly turns his hands about him,",
+    "Stands erect to see the sunshine,",
+    "Stands to see the golden moonlight,",
+    "That he may behold the Great Bear,",
+    "That he may the stars consider.",
+    "Thus our hero, Wainamoinen,",
+    "Thus the wonderful enchanter",
+    "Was delivered from his mother,",
+    "Ilmatar, the Ether's daughter.",
+    "",
+    "*** Press (b) to go back ***"
+  ]
+}
+
+    </script>
+  </body>
+</html>
