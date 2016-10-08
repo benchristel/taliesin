@@ -21,3 +21,37 @@ describe('Stage', function() {
     }).not.toThrowError()
   })
 })
+
+describe('sendInputEvent', function() {
+  var Stage, start, sendInputEvent
+  beforeEach(function() {
+    var $import = Ascetic()
+    Stage = $import.Stage
+    start = $import.start
+    sendInputEvent = $import.sendInputEvent
+  })
+
+  it('triggers on*Key*.typed handlers', function() {
+    var received = null
+    Stage('Foo', function(world) {
+      world.onCharKey.typed = function(key) {
+        received = key
+      }
+    })
+
+    start('Foo')
+
+    sendInputEvent('q')
+    expect(received).toEqual('q')
+  })
+
+  it('does nothing when no handler is registered', function() {
+    Stage('Foo', function() {
+    })
+
+    start('Foo')
+
+    expect(function() { sendInputEvent('q') })
+      .not.toThrowError()
+  })
+})

@@ -33,6 +33,10 @@ $export.render = function() {
   }
 }
 
+$export.sendInputEvent = function(key) {
+  $world.onCharKey.typed(key)
+}
+
 function KeyEvents() {
   var keyEvents = {}
 
@@ -200,6 +204,7 @@ return $export
   window.should = $import.should
   window.start  = $import.start
   var render    = $import.render
+  var sendInputEvent = $import.sendInputEvent
 
   var lineElements = []
   window.addEventListener('load', function() {
@@ -214,9 +219,23 @@ return $export
       renderToDom(test.results.failures)
       document.body.style.color = '#c00'
     } else {
-      renderToDom(render())
+      boot()
     }
   })
+
+  function boot() {
+    redraw()
+
+    window.addEventListener('keypress', function(event) {
+      console.log('key pressed', event)
+      sendInputEvent(event.key)
+      redraw()
+    })
+  }
+
+  function redraw() {
+    renderToDom(render())
+  }
 
   function renderToDom(lines) {
     for (var i = 0; i < lineElements.length; i++) {

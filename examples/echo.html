@@ -10,22 +10,22 @@
 
 Stage('Echo', function(world) {
   var typed = ''
-  
+
   world.onCharKey.typed = function(char) {
     typed += char
   }
 
   world.getDataToRender = function() {
-    return 'Type something > ' + typed
+    return 'Type something: ' + typed
   }
 })
 
 test('Echo')
-  .dataToRender(should.equal, 'Type something > ')
+  .dataToRender(should.equal, 'Type something: ')
 
 test('Echo')
   .type('hello')
-  .dataToRender(should.equal, 'Type something > hello')
+  .dataToRender(should.equal, 'Type something: hello')
 
 start('Echo')
 

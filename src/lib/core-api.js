@@ -15,3 +15,7 @@ $export.render = function() {
     return [e.toString()]
   }
 }
+
+$export.sendInputEvent = function(key) {
+  $world.onCharKey.typed(key)
+}
