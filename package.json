@@ -1,7 +1,7 @@
 {
-  "name": "ascetic",
+  "name": "taliesin",
   "version": "0.0.0",
-  "description": "Cynical web UI framework",
+  "description": "Poetic web UI",
   "main": "index.js",
   "scripts": {
     "test": "gulp"
@@ -14,9 +14,12 @@
     "browser",
     "bados",
     "minimalist",
+    "minimal",
     "cynic",
     "cynical",
-    "cynicism"
+    "cynicism",
+    "poetic",
+    "ui"
   ],
   "author": "Ben Christel",
   "license": "MIT",

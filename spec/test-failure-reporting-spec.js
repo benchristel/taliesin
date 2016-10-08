@@ -1,4 +1,4 @@
-describe('A failing Ascetic test', function() {
+describe('A failing test', function() {
   var Stage, should, test
   beforeEach(function() {
     var $import = inject()

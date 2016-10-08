@@ -1,4 +1,4 @@
-# Ascetic API
+# Taliesin API
 
 ## Error-printing
 
@@ -10,7 +10,7 @@ When an error occurs, it is printed to the DOM. It is also printed to the JS con
 
 `Stage(name: string, definition: (World) => void): void`
 
-Ascetic applications are built around the concept of "stages". A stage is a single "screen" of the application. It typically differs from other stages by its appearance when rendered on the screen, and the set of interactions available to the user.
+Taliesin applications are built around the concept of "stages". A stage is a single "screen" of the application. It typically differs from other stages by its appearance when rendered on the screen, and the set of interactions available to the user.
 
 A splash screen is a trivial example of a stage. Other stages might be data entry forms, option-selectors, text editors, loading screens, command line interfaces, levels of a game, the high-scores screen, etc.
 
@@ -128,3 +128,5 @@ Each test that runs also validates the state of the world and the output of getD
 
 - after `setUpWorld` is called
 - after each event (input, timer, request returning, etc.)
+
+If setUpWorld is not called, the initial state passed to initWorld is used.

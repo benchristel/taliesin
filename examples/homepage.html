@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Ascetic Example: Homepage</title>
-    <script type="text/javascript" src="../dist/ascetic.js"></script>
+    <title>Homepage</title>
+    <script type="text/javascript" src="../dist/taliesin.js"></script>
   </head>
   <body>
     <script type="text/javascript">
@@ -13,34 +13,24 @@ Stage('Home', function(world) {
   var lines = flatten([
     '',
     '',
-    center(80, 'A S C E T I C'),
+    center(80, 'T A L I E S I N'),
     '',
     '',
     center(80, repeat(70, '-')),
     '',
     center(80, '*** Press (j) and (k) to scroll ***'),
     '',
-    paragraph(
-      'Ascetic is a UI framework that brings the web ' +
-      'up-to-date with the technology of the 20th century. ' +
-      'Never-before-seen scrolling capabilities combined ' +
-      'with paranoid levels of test coverage ensure that ' +
-      'your application is an unstoppable juggernaut of ' +
-      'epic-level text. Type both uppercase and lowercase ' +
-      'characters in your quest for World-Wide-Web ' +
-      'domination!'
-    ),
-    '',
     center(80, repeat(70, '-')),
     '',
-    wrapCenterJustify(60, 80,
-      '"Show me your flowcharts and conceal your tables, and ' +
-      'I shall continue to be mystified. Show me your ' +
-      'tables, and I won’t usually need your flowcharts; ' +
-      'they’ll be obvious."'
-    ),
+    center(80, snug(40, 'I have been a multitude of shapes,')),
+    center(80, snug(40, 'Before I assumed a consistent form.')),
+    center(80, snug(40, 'I have been a sword, narrow, variegated,')),
+    center(80, snug(40, 'I have been a tear in the air,')),
+    center(80, snug(40, 'I have been in the dullest of stars.')),
+    center(80, snug(40, 'I have been a word among letters,')),
+    center(80, snug(40, 'I have been a book in the origin.')),
     '',
-    center(80, rightJustify(60, '-- Fred Brooks, _The Mythical Man Month_'))
+    center(80, rightJustify(40, '--Taliesin'))
   ])
 
   world.onCharKey.typed = function(char) {
@@ -82,10 +72,6 @@ function scrollablePage(data) {
   var scroll = data.scroll
 
   return lines.slice(scroll, scroll + 30)
-}
-
-function paragraph(text) {
-  return wrapCenterJustify(70, 80, text)
 }
 
 function wrapCenterJustify(wrapWidth, centerWidth, text) {

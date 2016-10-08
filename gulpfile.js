@@ -19,7 +19,7 @@ gulp.task('concat-sources', function() {
     .pipe(iife())
     .pipe(addsrc.prepend('src/injector.js'))
     .pipe(addsrc.append('src/web.js'))
-    .pipe(concat('ascetic.js'))
+    .pipe(concat('taliesin.js'))
     .pipe(iife())
     .pipe(gulp.dest('dist'))
 
