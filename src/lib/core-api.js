@@ -1,21 +1,48 @@
-// todo: why is Stage capitalized and test lowercase?
-$export.Stage = function(name, definitionFn) {
-  $stages[name] = definitionFn
-}
+inject('$stages', function() {
+  // holds stage definitions
+  return {}
+})
 
-$export.start = function(stageName) {
-  $stages[stageName]($world)
-}
+inject('$world', function(deps) {
+  // holds the global state of the application
+  return deps.World()
+})
 
-$export.render = function() {
-  try {
-    return [JSON.stringify($world.getDataToRender())]
-  } catch(e) {
-    console.error(e)
-    return [e.toString()]
+inject('Stage', function(deps) {
+  var $stages = deps.$stages
+
+  // todo: why is Stage capitalized and test lowercase?
+  return function Stage(name, definitionFn) {
+    $stages[name] = definitionFn
   }
-}
+})
 
-$export.sendInputEvent = function(key) {
-  $world.onCharKey.typed(key)
-}
+inject('start', function(deps) {
+  var $stages = deps.$stages
+  var $world  = deps.$world
+
+  return function start(stageName) {
+    $stages[stageName]($world)
+  }
+})
+
+inject('render', function(deps) {
+  var $world = deps.$world
+
+  return function render() {
+    try {
+      return [JSON.stringify($world.getDataToRender())]
+    } catch(e) {
+      console.error(e)
+      return [e.toString()]
+    }
+  }
+})
+
+inject('sendInputEvent', function(deps) {
+  var $world = deps.$world
+
+  return function sendInputEvent(key) {
+    $world.onCharKey.typed(key)
+  }
+})

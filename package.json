@@ -22,7 +22,9 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-add-src": "^0.2.0",
     "gulp-concat": "^2.6.0",
+    "gulp-iife": "^0.3.0",
     "gulp-jasmine": "git://github.com/sindresorhus/gulp-jasmine.git#fix-default-reporter-bug",
     "jasmine": "^2.5.2"
   },

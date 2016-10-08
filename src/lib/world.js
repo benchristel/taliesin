@@ -1,15 +1,19 @@
-function World() {
-  var world = {}
-  var keyEventRegistries = {}
+inject('World', function(deps) {
+  var KeyEvents = deps.KeyEvents
 
-  world.onCharKey = KeyEvents()
-  world.onKey = function(keyName) {
-    if (!keyEventRegistries[keyName]) {
-      keyEventRegistries[keyName] = KeyEvents()
+  return function World() {
+    var world = {}
+    var keyEventRegistries = {}
+
+    world.onCharKey = KeyEvents()
+    world.onKey = function(keyName) {
+      if (!keyEventRegistries[keyName]) {
+        keyEventRegistries[keyName] = KeyEvents()
+      }
+
+      return keyEventRegistries[keyName]
     }
 
-    return keyEventRegistries[keyName]
+    return world
   }
-
-  return world
-}
+})

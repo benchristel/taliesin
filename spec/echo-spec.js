@@ -1,7 +1,7 @@
 describe('An echo chamber', function() {
   var Stage, should, test
   beforeEach(function () {
-    var $import = Ascetic()
+    var $import = inject()
     Stage  = $import.Stage
     should = $import.should
     test   = $import.test

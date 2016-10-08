@@ -1,1 +1,1 @@
-function noop() {}
+inject('noop', function() { return function noop() {} })

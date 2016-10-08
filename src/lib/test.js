@@ -1,97 +1,106 @@
-;(function() {
+inject('test', function(deps) {
+  var $stages = deps.$stages
+  var World   = deps.World
 
-var test = $export.test = function(stageName) {
-  var testBuilder = Object.create(nullTestBuilder)
-  var testWorld = World()
+  function test(stageName) {
+    var testBuilder = Object.create(nullTestBuilder)
+    var testWorld = World()
 
-  if (typeof $stages[stageName] !== 'function') {
-    // we've encountered a fatal error and will not be
-    // running assertions.
-    fail('There is no stage named `' + stageName + '`.')
-    return nullTestBuilder
-  }
+    if (typeof $stages[stageName] !== 'function') {
+      // we've encountered a fatal error and will not be
+      // running assertions.
+      fail('There is no stage named `' + stageName + '`.')
+      return nullTestBuilder
+    }
 
-  $stages[stageName](testWorld)
+    $stages[stageName](testWorld)
 
-  if (typeof testWorld.getDataToRender !== 'function') {
-    fail('Stage `' + stageName + '` did not define a getDataToRender function.')
-    return nullTestBuilder
-  }
+    if (typeof testWorld.getDataToRender !== 'function') {
+      fail('Stage `' + stageName + '` did not define a getDataToRender function.')
+      return nullTestBuilder
+    }
 
-  testBuilder.dataToRender = function() {
-    var actual, matcher, expected, prop
+    testBuilder.dataToRender = function() {
+      var actual, matcher, expected, prop
 
-    if (typeof arguments[0] === 'function') {
-      matcher  = arguments[0]
-      expected = arguments[1]
-      try {
-        actual = testWorld.getDataToRender()
-      } catch(e) {
-        console.error(e)
-        fail('Stage `' + stageName + '` threw an error in getDataToRender: ' + e)
-        return nullTestBuilder
+      if (typeof arguments[0] === 'function') {
+        matcher  = arguments[0]
+        expected = arguments[1]
+        try {
+          actual = testWorld.getDataToRender()
+        } catch(e) {
+          console.error(e)
+          fail('Stage `' + stageName + '` threw an error in getDataToRender: ' + e)
+          return nullTestBuilder
+        }
+      } else {
+        prop     = arguments[0]
+        matcher  = arguments[1]
+        expected = arguments[2]
+        actual = testWorld.getDataToRender()[prop]
       }
-    } else {
-      prop     = arguments[0]
-      matcher  = arguments[1]
-      expected = arguments[2]
-      actual = testWorld.getDataToRender()[prop]
+      test.results.total++
+      if (matcher(actual, expected)) {
+        test.results.passed++
+      } else {
+        fail(failureMessage(stageName, prop, matcher, actual, expected))
+      }
+      return testBuilder
     }
-    test.results.total++
-    if (matcher(actual, expected)) {
-      test.results.passed++
-    } else {
-      fail(failureMessage(stageName, prop, matcher, actual, expected))
+
+    testBuilder.type = function(text) {
+      for (var i = 0; i < text.length; i++) {
+        var char = text[i]
+        testWorld.onCharKey.typed(char)
+      }
+      return testBuilder
     }
+
+    testBuilder.press = function(keyName) {
+      testWorld.onKey(keyName).typed(keyName)
+      return testBuilder
+    }
+
+    function fail(message) {
+      test.results.failed++
+      test.results.failures.push(message)
+    }
+
     return testBuilder
   }
 
-  testBuilder.type = function(text) {
-    for (var i = 0; i < text.length; i++) {
-      var char = text[i]
-      testWorld.onCharKey.typed(char)
+  test.results = {
+    total: 0,
+    passed: 0,
+    failed: 0,
+    failures: []
+  }
+
+  return test
+})
+
+inject('should', function() {
+  // holds matchers
+
+  return {
+    equal: function equal(actual, expected) {
+      return objectMatch(actual, expected)
+          || primitiveMatch(actual, expected)
     }
-    return testBuilder
   }
 
-  testBuilder.press = function(keyName) {
-    testWorld.onKey(keyName).typed(keyName)
-    return testBuilder
+  function objectMatch(actual, expected) {
+    return typeof actual === 'object'
+           && typeof expected === 'object'
+           && containsAll(actual, expected)
   }
 
-  function fail(message) {
-    test.results.failed++
-    test.results.failures.push(message)
+  function primitiveMatch(actual, expected) {
+    return typeof actual !== 'object'
+           && typeof expected !== 'object'
+           && actual === expected
   }
-
-  return testBuilder
-}
-
-test.results = {
-  total: 0,
-  passed: 0,
-  failed: 0,
-  failures: []
-}
-
-var should = $export.should = {
-  equal: function equal(actual, expected) {
-    return objectMatch(actual, expected)
-        || primitiveMatch(actual, expected)
-  }
-}
-
-function objectMatch(actual, expected) {
-  return typeof actual === 'object'
-         && typeof expected === 'object'
-         && containsAll(actual, expected)
-}
-
-function primitiveMatch(actual, expected) {
-  return typeof actual !== 'object'
-         && typeof expected !== 'object'
-         && actual === expected
-}
+})
 
 function failureMessage (stageName, prop, matcher, actual, expected) {
   var pathToFailure = prop ? prop : 'data'
@@ -124,5 +133,3 @@ var nullTestBuilder = {
   type: returnNullTestBuilder,
   press: returnNullTestBuilder
 }
-
-})();

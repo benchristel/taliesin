@@ -1,7 +1,11 @@
-function KeyEvents() {
-  var keyEvents = {}
+inject('KeyEvents', function(deps) {
+  var noop = deps.noop
 
-  keyEvents.typed = noop
+  return function KeyEvents() {
+    var keyEvents = {}
 
-  return keyEvents
-}
+    keyEvents.typed = noop
+
+    return keyEvents
+  }
+})

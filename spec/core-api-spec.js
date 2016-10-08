@@ -1,7 +1,7 @@
 describe('Stage', function() {
   var Stage, start
   beforeEach(function() {
-    var $import = Ascetic()
+    var $import = inject()
     Stage = $import.Stage
     start = $import.start
   })
@@ -25,7 +25,7 @@ describe('Stage', function() {
 describe('sendInputEvent', function() {
   var Stage, start, sendInputEvent
   beforeEach(function() {
-    var $import = Ascetic()
+    var $import = inject()
     Stage = $import.Stage
     start = $import.start
     sendInputEvent = $import.sendInputEvent
