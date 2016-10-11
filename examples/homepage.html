@@ -15,13 +15,12 @@ Stage('Home', function(world) {
     '',
     center(80, 'T A L I E S I N'),
     '',
-    '',
-    center(80, repeat(70, '-')),
-    '',
+    divider(),
+
     center(80, '*** Press (j) and (k) to scroll ***'),
-    '',
-    center(80, repeat(70, '-')),
-    '',
+
+    divider(),
+
     center(80, snug(40, 'I have been a multitude of shapes,')),
     center(80, snug(40, 'Before I assumed a consistent form.')),
     center(80, snug(40, 'I have been a sword, narrow, variegated,')),
@@ -30,7 +29,21 @@ Stage('Home', function(world) {
     center(80, snug(40, 'I have been a word among letters,')),
     center(80, snug(40, 'I have been a book in the origin.')),
     '',
-    center(80, rightJustify(40, '--Taliesin'))
+    center(80, rightJustify(40, '--Taliesin')),
+
+    divider(),
+
+    center(80, snug(49, "'Tis more to guide than spur the Muse's Steed;")),
+    center(80, snug(49, "Restrain his Fury, than provoke his Speed;")),
+    center(80, snug(49, "The winged Courser, like a gen'rous Horse,")),
+    center(80, snug(49, "Shows most true Mettle when you check his Course.")),
+    '',
+    center(80, snug(49, "Those RULES of old discover'd, not devis'd,")),
+    center(80, snug(49, "Are Nature still, but Nature Methodiz'd;")),
+    center(80, snug(49, "Nature, like Liberty, is but restrain'd")),
+    center(80, snug(49, "By the same Laws which first herself ordain'd.")),
+    '',
+    center(80, rightJustify(49, '--Alexander Pope, "On Criticism"')),
   ])
 
   world.onCharKey.typed = function(char) {
@@ -48,6 +61,14 @@ Stage('Home', function(world) {
 
   world.renderer = scrollablePage
 })
+
+function divider() {
+  return [
+    '',
+    center(80, repeat(70, '-')),
+    ''
+  ]
+}
 
 function repeat(times, string) {
   return Array(times + 1).join(string)
