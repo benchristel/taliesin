@@ -2,6 +2,41 @@
 
 Taliesin is a frontend web framework. It is intended to be the standard application framework of the BadOS operating system, but it can also be used outside of BadOS.
 
+It differs from other frameworks in affording very little control over the appearance of the application—output is rendered as an 80x30-character grid of monospace text. (Styled text, images, video, and audio are under consideration.) Additionally, there is no facility for mouse input; only keyboard input is supported.
+
+Why would you ever endure these sacrifices or inflict them on your users? Taliesin lacks UI gloss, but it makes up for it in UX quality and development speed.
+
+- Runtime type-checking and an integrated test framework let you write bulletproof code. Every part of the system can be thoroughly checked from multiple angles. If you test-drive your code, your users will not experience bugs.
+- Can't get your coworkers to run tests? With Taliesin, your tests run _every time the app loads in a browser_. If they fail, the app will confront you with an error message instead of starting.
+- The straightforward API and complete lack of CSS mean you'll have fewer mysterious issues that can only be fixed by your local web guru whispering a bizarre incantation.
+- The affordances for mutating global state (safely!) finally make it possible to avoid the scenario where every third request from the PM leaves your carefully-architected module boundaries in shambles. PMs (and users) don't understand encapsulation; don't expect them to think in terms of components.
+- There is no tooling. No compilation, no transpilation, no transclusion, no `include`s, no polyfills<sup>*</sup>, no sourcemaps, no expression language, no task runner, and no config files. You just write JavaScript, and it just runs.
+- Your users will never be frustrated by having to navigate your app with the crappy trackpad on their netbook. They'll only have to deal with the slightly-less-crappy keyboard.
+- It's _damn fast_.
+- Retro UIs are cool.
+
+<sup>*</sup>Okay, there's one, for Proxies, but it's baked into the framework and you don't have to worry about it.
+
+## Getting Started
+
+The `taliesin` executable creates a new project with everything you need to get started.
+
+Assuming you have `node` already, here's what you gotta do:
+
+```bash
+cd ~ # (or wherever you like to put projects)
+
+# install Taliesin
+npm install --global taliesin
+
+# create your project
+taliesin my-awesome-project
+
+# see it work
+cd my-awesome-project
+open index.html
+```
+
 ## Philosophy
 
 Taliesin has the following priorities:
@@ -11,12 +46,12 @@ Taliesin has the following priorities:
 - **Immediate utility**
   - _over perfect solutions that may never ship_
 - **Addressing a need**
-  - _over making money_
+  - _over captivating users_
 - **Simple, text-based UI**
   - _over complex information architecture_
 - **Focused workflows**
   - _over multitasking_
-- **Standardized UX**
+- **Standardized UI**
   - _over branding and individuality_
 - **Contentment with what can be done simply**
   - _over risk-taking and pushing the limits of what's possible_
